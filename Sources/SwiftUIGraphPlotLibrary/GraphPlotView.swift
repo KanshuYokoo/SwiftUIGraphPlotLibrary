@@ -25,7 +25,7 @@ struct CirclePlotData:Codable, Hashable {
     var radius:CGFloat
 }
 
-struct GraphPlotView:View {
+public struct GraphPlotView:View {
     
     var plotType:PlotType
     var geometryProxy:GeometryProxy

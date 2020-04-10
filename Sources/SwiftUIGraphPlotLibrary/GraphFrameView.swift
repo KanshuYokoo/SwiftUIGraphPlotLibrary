@@ -14,7 +14,7 @@ enum frameType {
     case noFrame
 }
 
-struct GraphFrameView: View {
+public struct GraphFrameView: View {
     let geometryProxy:GeometryProxy
     
     
