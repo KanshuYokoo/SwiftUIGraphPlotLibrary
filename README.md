@@ -23,3 +23,5 @@ GeometryReader { proxy in
 }
 
 ```
+
+![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/bubbleChartPlot.png)
