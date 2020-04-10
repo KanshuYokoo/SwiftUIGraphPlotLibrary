@@ -1,3 +1,4 @@
 # SwiftUIGraphPlotLibrary
 
-A description of this package.
+Graph plot library with SwiftUI
+
