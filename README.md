@@ -2,3 +2,24 @@
 
 Graph plot library with SwiftUI
 
+
+## platform
+It supports only on ios v13  
+
+
+## useage
+``` swift
+
+let plotset:[PlotData] = [PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 8.0),PlotData(x: 5.0,y: 30.0),PlotData(x: 6.0,y: 25.0),PlotData(x: 7.0,y: 24.0),PlotData(x: 8.0,y: 23.0),PlotData(x: 9.0,y: 22.0),PlotData(x: 9.6,y: 21.0)]
+
+GeometryReader { proxy in
+           ZStack {
+               GraphFrameView(geometryProxy:proxy)
+            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2).setCircle(color:.blue){index in plotset2[index].y * 1.4}
+                .setHueDegreeFunc{ index in
+                    return Double(plotset2[index].y * 90 / 23)
+            }
+        }
+}
+
+```
