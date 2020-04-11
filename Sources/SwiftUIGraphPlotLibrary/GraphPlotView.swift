@@ -8,18 +8,18 @@
 
 import SwiftUI
 
-enum PlotType {
+public enum PlotType {
     case linePlot
     case circlePlot
     case verticalBar
 }
 
-struct PlotData:Codable, Hashable {
+public struct PlotData:Codable, Hashable {
     var x:CGFloat
     var y:CGFloat
 }
 
-struct CirclePlotData:Codable, Hashable {
+public struct CirclePlotData:Codable, Hashable {
     var x:CGFloat
     var y:CGFloat
     var radius:CGFloat

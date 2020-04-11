@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum frameType {
+public enum frameType {
     case normal
     case leadingBottom
     case noFrame
