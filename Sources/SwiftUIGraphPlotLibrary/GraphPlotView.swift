@@ -15,8 +15,8 @@ public enum PlotType {
 }
 
 public struct PlotData:Codable, Hashable {
-    var x:CGFloat
-    var y:CGFloat
+    public var x:CGFloat
+    public var y:CGFloat
 }
 
 public struct CirclePlotData:Codable, Hashable {
