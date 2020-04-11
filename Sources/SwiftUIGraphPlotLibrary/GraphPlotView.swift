@@ -102,7 +102,7 @@ public struct GraphPlotView:View {
            }
        }
     
-    func setHueDegreeFunc(function:HueDegreeFunc?) ->  GraphPlotView{
+    public func setHueDegreeFunc(function:HueDegreeFunc?) ->  GraphPlotView{
         var graphPlotView = self
         graphPlotView.hueDegreeFunc = function
         return graphPlotView
@@ -177,7 +177,7 @@ extension GraphPlotView {
           }
     }
     
-    func setCircle(color:Color? = nil, radius:CGFloat? = nil, radiusFunc:RadiusFunc? = nil) -> GraphPlotView {
+   public func setCircle(color:Color? = nil, radius:CGFloat? = nil, radiusFunc:RadiusFunc? = nil) -> GraphPlotView {
         var graphView = self
         if let color = color {
             graphView.color = color
@@ -247,7 +247,7 @@ extension GraphPlotView {
         return max(minWidth, defaultMinWidth)
     }
     
-    func setBarPlot(opacity:Double? = nil, hueDegree:Double? = 0.0) -> GraphPlotView {
+    public func setBarPlot(opacity:Double? = nil, hueDegree:Double? = 0.0) -> GraphPlotView {
         var graphView = self
         if let opacity = opacity {
             graphView.opacity = opacity
