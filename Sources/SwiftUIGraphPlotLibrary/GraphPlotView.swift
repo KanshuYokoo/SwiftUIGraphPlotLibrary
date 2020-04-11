@@ -17,6 +17,10 @@ public enum PlotType {
 public struct PlotData {
     var x:CGFloat
     var y:CGFloat
+    public init(x:CGFloat, y:CGFloat) {
+        self.x = x
+        self.y = y
+    }
 }
 
 public struct CirclePlotData {
