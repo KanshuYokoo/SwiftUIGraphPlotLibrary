@@ -110,7 +110,7 @@ public struct GraphPlotView:View {
         return graphPlotView
     }
         
-    var body: some View {
+    public var body: some View {
         
         ZStack {
             if (self.plotType == .linePlot) {

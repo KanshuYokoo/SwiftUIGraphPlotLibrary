@@ -67,7 +67,7 @@ public struct GraphFrameView: View {
         
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack{
             if self.type == .normal || self.type == .leadingBottom {
                 LineView(geometryProxy:geometryProxy,orientation: .varticalLeading, color:color)
