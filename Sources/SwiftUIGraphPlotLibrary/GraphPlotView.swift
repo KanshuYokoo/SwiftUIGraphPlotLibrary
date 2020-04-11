@@ -21,6 +21,13 @@ public struct PlotData {
         self.x = x
         self.y = y
     }
+    
+    public func getX() -> CGFloat {
+        return self.x
+    }
+    public func getY() -> CGFloat {
+        return self.y
+    }
 }
 
 public struct GraphPlotView:View {
