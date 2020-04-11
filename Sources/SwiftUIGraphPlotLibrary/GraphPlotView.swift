@@ -34,13 +34,13 @@ public struct GraphPlotView:View {
     var circleRadius:CGFloat = 10
     var hueDegree:Double = 0.0
     
-    typealias RadiusFunc = (Int) -> CGFloat
+    public typealias RadiusFunc = (Int) -> CGFloat
     var circleRadiusFunc: RadiusFunc?
     
-    typealias ColorFunc = (Int) -> Color
+    public typealias ColorFunc = (Int) -> Color
     var colorFunc: ColorFunc?
     
-    typealias HueDegreeFunc = (Int) -> Double
+    public typealias HueDegreeFunc = (Int) -> Double
     var hueDegreeFunc: HueDegreeFunc?
     
     public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red) {
