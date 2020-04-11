@@ -14,7 +14,6 @@ public enum PlotType {
     case verticalBar
 }
 
-@init(public)
 public struct PlotData {
     var x:CGFloat
     var y:CGFloat
