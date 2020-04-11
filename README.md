@@ -16,9 +16,9 @@ let plotset:[PlotData] = [PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotDa
 GeometryReader { proxy in
            ZStack {
                GraphFrameView(geometryProxy:proxy)
-            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2).setCircle(color:.blue){index in plotset2[index].y * 1.4}
+            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2).setCircle(color:.blue){index in plotset2[index].getY) * 1.4}
                 .setHueDegreeFunc{ index in
-                    return Double(plotset2[index].y * 90 / 23)
+                    return Double(plotset2[index].getY() * 90 / 23)
             }
         }
 }
