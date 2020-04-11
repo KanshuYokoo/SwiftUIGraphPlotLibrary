@@ -54,7 +54,7 @@ public struct GraphFrameView: View {
     public var isGridX:Bool = true
     public var isGridY:Bool = true
     
-    init(geometryProxy proxy:GeometryProxy,x:Int = 10, y:Int = 10, color:Color = .gray) {
+    public init(geometryProxy proxy:GeometryProxy,x:Int = 10, y:Int = 10, color:Color = .gray) {
         self.geometryProxy = proxy
         self.color = color
         self.xgridNumber = (x == 0) ? 1 : x

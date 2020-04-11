@@ -23,12 +23,6 @@ public struct PlotData {
     }
 }
 
-public struct CirclePlotData {
-    var x:CGFloat
-    var y:CGFloat
-    var radius:CGFloat
-}
-
 public struct GraphPlotView:View {
     
     var plotType:PlotType
@@ -49,7 +43,7 @@ public struct GraphPlotView:View {
     typealias HueDegreeFunc = (Int) -> Double
     var hueDegreeFunc: HueDegreeFunc?
     
-    init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red) {
+    public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red) {
         self.geometryProxy = geometryProxy
         self.dataSet = dataSet
         self.color = color
