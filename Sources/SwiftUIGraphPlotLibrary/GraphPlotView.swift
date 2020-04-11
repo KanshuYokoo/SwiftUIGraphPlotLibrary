@@ -14,12 +14,12 @@ public enum PlotType {
     case verticalBar
 }
 
-public struct PlotData:Codable, Hashable {
-    public var x:CGFloat
-    public var y:CGFloat
+public struct PlotData {
+    var x:CGFloat
+    var y:CGFloat
 }
 
-public struct CirclePlotData:Codable, Hashable {
+public struct CirclePlotData {
     var x:CGFloat
     var y:CGFloat
     var radius:CGFloat
