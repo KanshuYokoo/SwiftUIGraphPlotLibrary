@@ -17,4 +17,12 @@ extension Sequence {
     func map <T> (_ keyPath: KeyPath<Element, T>) -> [T] {
         return map {$0[keyPath: keyPath]}
     }
+    
+    func min <T: Comparable> (_ keyPath: KeyPath<Element, T>) -> T? {
+        return map(keyPath).min()
+    }
+    
+    func max<T: Comparable> (_ keyPath: KeyPath<Element, T>) -> T? {
+        return map(keyPath).max()
+    }
 }
