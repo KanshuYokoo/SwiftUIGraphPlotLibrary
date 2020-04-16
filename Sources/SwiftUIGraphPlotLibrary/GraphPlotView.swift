@@ -14,7 +14,7 @@ public enum PlotType {
     case verticalBar
 }
 
-public struct PlotData {
+public struct PlotData:Equatable {
     var x:CGFloat
     var y:CGFloat
     public init(x:CGFloat, y:CGFloat) {
