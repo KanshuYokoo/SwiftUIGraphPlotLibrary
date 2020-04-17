@@ -30,24 +30,23 @@ public struct PlotData:Equatable {
     }
 }
 
+public typealias RadiusFunc = (Int) -> CGFloat
+public typealias ColorFunc = (Int) -> Color
+public typealias HueDegreeFunc = (Int) -> Double
+
 public struct GraphPlotView:View {
     
     var plotType:PlotType
     var geometryProxy:GeometryProxy
     let dataSet:[PlotData]
     let plotsCount:Int
-    var color:Color
+    var color:Color = .red
     var opacity:Double = 1.0
     var circleRadius:CGFloat = 10
     var hueDegree:Double = 0.0
     
-    public typealias RadiusFunc = (Int) -> CGFloat
     var circleRadiusFunc: RadiusFunc?
-    
-    public typealias ColorFunc = (Int) -> Color
     var colorFunc: ColorFunc?
-    
-    public typealias HueDegreeFunc = (Int) -> Double
     var hueDegreeFunc: HueDegreeFunc?
     
     public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red) {
@@ -56,6 +55,27 @@ public struct GraphPlotView:View {
         self.color = color
         self.plotType = type
         self.plotsCount = dataSet.count
+    }
+    
+    public init(geometryProxy:GeometryProxy, type:PlotType,  dataSet:[PlotData], color:Color?, opacity:Double?, circleRadius:CGFloat?,  hueDegree:Double? ,circleRadiusFunc: RadiusFunc?, colorFunc: ColorFunc?,hueDegreeFunc: HueDegreeFunc?) {
+        self.geometryProxy = geometryProxy
+        self.dataSet = dataSet
+        self.plotType = type
+        self.plotsCount = dataSet.count
+        
+        if let color = color {
+            self.color = color
+        }
+        if let opacity = opacity {
+            self.opacity = opacity
+        }
+        if let  hueDegree =  hueDegree {
+            self.hueDegree = hueDegree
+        }
+        self.circleRadiusFunc = circleRadiusFunc
+        self.colorFunc = colorFunc
+        self.hueDegreeFunc = hueDegreeFunc
+        
     }
     
     //todo make plotData protocol
@@ -109,6 +129,7 @@ public struct GraphPlotView:View {
            }
        }
     
+    //todo decommission
     public func setHueDegreeFunc(function:HueDegreeFunc?) ->  GraphPlotView{
         var graphPlotView = self
         graphPlotView.hueDegreeFunc = function
@@ -184,6 +205,7 @@ extension GraphPlotView {
           }
     }
     
+    //decommssion
    public func setCircle(color:Color? = nil, radius:CGFloat? = nil, radiusFunc:RadiusFunc? = nil) -> GraphPlotView {
         var graphView = self
         if let color = color {
