@@ -15,19 +15,28 @@ public struct GraphView: View {
     public let frameView:FrameView
     public var plotView:PlotView
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize) {
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil) {
         self.dataSet = dataSet
         self.grapFrameSize = frameSize
-        self.frameView = FrameView()
+        
+        if let frameView = frameView {
+            self.frameView = frameView
+        } else {
+            self.frameView = FrameView()
+        }
         
         self.plotView = PlotView(dataSet: dataSet, plotTypes: plotTypes)
     }
     
-    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize) {
+    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil) {
         self.dataSet = dataSet
         self.grapFrameSize = frameSize
-        self.frameView = FrameView()
-               
+        
+        if let frameView = frameView {
+            self.frameView = frameView
+        } else {
+            self.frameView = FrameView()
+        }
         self.plotView = PlotView(dataSet: dataSet, plotTypes: [plotType])
     }
 
