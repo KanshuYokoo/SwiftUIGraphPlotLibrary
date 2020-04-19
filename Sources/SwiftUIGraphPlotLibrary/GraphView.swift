@@ -71,14 +71,25 @@ public struct GraphView: View {
 }
 
 public struct FrameView:View {
+    let xGridLine:Int
+    let yGridLine:Int
+    let color:Color
+    let type:frameType
+    let showGridX:Bool
+    let showGridY:Bool
     
-    init(x:Int = 10, y:Int = 10, color:Color = .gray, type:frameType = .normal,gridX:Bool = true, gridY:Bool = true) {
-        //todo
+    init(showGridX:Bool = true, showGridY:Bool = true, howManyLinesX:Int = 10, howManyLinesY:Int = 10, color:Color = .gray, type:frameType = .normal) {
+        self.xGridLine = howManyLinesX
+        self.yGridLine = howManyLinesY
+        self.color = color
+        self.showGridX = showGridX
+        self.showGridY = showGridY
+        self.type = type
     }
     
     public var body:some View {
         GeometryReader {proxy in
-            GraphFrameView(geometryProxy:proxy)
+            GraphFrameView(geometryProxy: proxy, x: self.xGridLine, y: self.yGridLine, color: self.color, type:self.type , gridX: self.showGridX, gridY: self.showGridY)
         }
     }
     
@@ -104,14 +115,7 @@ public struct PlotView: View {
         return ZStack{
             ForEach(0..<self.plotSet.count) { index in
                 self.getGraphPlotView(from: self.plotSet[index], geometryProxy: proxy)
-            }
-
-            /*
-            GraphPlotView(type:.linePlot, geometryProxy: proxy, dataSet: self.dataSet)
-            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: self.dataSet)
-            GraphPlotView(type:.verticalBar, geometryProxy: proxy, dataSet: self.dataSet)
-            */
-            
+                }
             }
         }
     }
@@ -136,6 +140,7 @@ public struct GraphPlot {
         
         self.plotType = type
         self.dataSet = dataSet
+        self.color = color
         self.opacity = opacity
         self.circleRadius = circleRadius
         self.hueDegree = hueDegree
