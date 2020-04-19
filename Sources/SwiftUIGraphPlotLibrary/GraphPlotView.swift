@@ -40,7 +40,7 @@ public struct GraphPlotView:View {
     var geometryProxy:GeometryProxy
     let dataSet:[PlotData]
     let plotsCount:Int
-    var color:Color = .red
+    var color:Color = Color(red: 60.0 / 255, green: 79.0 / 255, blue: 255.0 / 255)
     var opacity:Double = 1.0
     var circleRadius:CGFloat = 10
     var hueDegree:Double = 0.0
@@ -136,6 +136,14 @@ public struct GraphPlotView:View {
         return graphPlotView
     }
         
+    func getColor(_ index: Int) -> Color {
+        if let colorFunc = self.colorFunc {
+            return colorFunc(index)
+        } else {
+            return self.color
+        }
+    }
+    
     public var body: some View {
         
         ZStack {
@@ -196,7 +204,7 @@ extension GraphPlotView {
        return ZStack() {
        ForEach(0..<plotsCount) { index in
            Circle()
-               .fill(self.color)
+            .fill(self.getColor(index))
             .hueRotation(Angle(degrees: self.getHueDegree(index)))
                .blendMode(BlendMode.multiply)
                .frame(width: self.getCirclePlotRadius(index), height: self.getCirclePlotRadius(index))
@@ -250,7 +258,7 @@ extension GraphPlotView {
         ZStack() {
             ForEach(0..<plotsCount) {
                 index in
-                ProgressBar(height: self.verticalBarDataPLot[index], width: self.barWidthX, hueDegree: self.getHueDegree(index), opacity: self.opacity)
+                ProgressBar(height: self.verticalBarDataPLot[index], width: self.barWidthX, hueDegree: self.getHueDegree(index), opacity: self.opacity, color: self.getColor(index))
                     .offset(x:self.verticalBarDataOffSet[index].x , y: self.verticalBarDataOffSet[index].y)
             }
             
