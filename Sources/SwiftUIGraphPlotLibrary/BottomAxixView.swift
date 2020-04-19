@@ -11,7 +11,15 @@ import SwiftUI
 public struct BottomAxisView: View {
     let dataSet:[PlotData]
     let lendth:CGFloat
-    let counter:Int = 5
+    let counter:Int
+    let stringFormat:String
+    
+    init(dataSet:[PlotData], lendth:CGFloat, counter:Int = 5, format:String = "%.1f") {
+        self.dataSet = dataSet
+        self.lendth = lendth
+        self.counter = counter
+        self.stringFormat = format
+    }
     
     var max:CGFloat {
         dataSet.max(\.x) ?? lendth
@@ -33,7 +41,7 @@ public struct BottomAxisView: View {
       
       func lavel(at index:Int) -> String {
           let num = self.min + dx *  CGFloat(index)
-          return num.description
+        return String(format:self.stringFormat, num)
       }
       public var body: some View{
           ZStack(alignment: .trailing){
