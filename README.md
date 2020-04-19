@@ -26,3 +26,17 @@ GeometryReader { proxy in
 ```
 
 ![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/bubbleChartPlot.png)
+
+## Contribute
+This program is still under development.
+However If you have any query or need more information, please open an issue.
+
+Your contribution is highly appliciated.
+Please help me !!!
+
+## Credits
+This program is created by Kansu Yokoo
+
+## License
+
+This program is available under the MIT license. See the LICENSE file for more info.

@@ -11,7 +11,15 @@ import SwiftUI
 public struct LeadingAxisView:View {
     let dataSet:[PlotData]
     let height:CGFloat
-    let counter:Int = 5
+    let counter:Int
+    let stringFormat:String
+    
+    init(dataSet:[PlotData], height:CGFloat, counter:Int = 5, format:String = "%.1f") {
+        self.dataSet = dataSet
+        self.height = height
+        self.counter = counter
+        self.stringFormat = format
+    }
     
     var max:CGFloat {
         dataSet.max(\.y) ?? height
@@ -33,7 +41,7 @@ public struct LeadingAxisView:View {
     
     func lavel(at index:Int) -> String {
         let num = self.min + dy *  CGFloat(index)
-        return num.description
+        return String(format: self.stringFormat, num)
     }
     public var body: some View{
         ZStack(alignment: .trailing){
