@@ -35,7 +35,7 @@ Your contribution is highly appliciated.
 Please help me !!!
 
 ## Credits
-This program is created by Kansu Yokoo
+This program is created by Kanshu Yokoo
 
 ## License
 
