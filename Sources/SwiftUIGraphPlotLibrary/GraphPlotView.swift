@@ -101,8 +101,13 @@ public struct GraphPlotView:View {
         return dataSet.count
     }
     ///
+    // The edge of x-axis on geometry reader frame
+    var xAxisRangeOnGeometry:CGFloat {
+        return self.geometryProxy.size.width * 0.9
+    }
+    
     var xratio:CGFloat {
-        return  self.geometryProxy.size.width * 0.9 / xAxisL
+        return  xAxisRangeOnGeometry / xAxisL
     }
     
     var yratio:CGFloat {
