@@ -29,11 +29,11 @@ public struct GraphFrameView: View {
     var xLines:[Int] {
         switch type {
         case .normal:
-            return Array(1...(xgridNumber - 1))
-        case .leadingBottom:
             return Array(1...xgridNumber)
+        case .leadingBottom:
+            return Array(1...(xgridNumber + 1))
         default:
-            return Array(0...xgridNumber)
+            return Array(0...(xgridNumber + 1))
         }
     }
     var yLines:[Int] {
@@ -60,7 +60,7 @@ public struct GraphFrameView: View {
         self.xgridNumber = (x == 0) ? 1 : x
         self.ygridNumber = (y == 0) ? 1 : y
         
-        self.frameWidth = proxy.size.width
+        self.frameWidth = proxy.size.width * 0.9
         self.frameHeight = proxy.size.height
         self.dx = frameWidth/CGFloat(xgridNumber)
         self.dy = frameHeight/CGFloat(ygridNumber)

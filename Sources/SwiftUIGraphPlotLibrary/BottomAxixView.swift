@@ -28,29 +28,32 @@ public struct BottomAxisView: View {
         dataSet.min(\.y) ?? 0.0
     }
       
-      var dx :CGFloat {
-          return (max - min) / CGFloat(counter)
-      }
-      var offSetDx:CGFloat {
-          return lendth / CGFloat(counter)
-      }
+    var dx :CGFloat {
+        return (max - min) / CGFloat(counter)
+    }
+    // The edge of x-axis on geometry reader frame
+    var xAxisRangeOnGeometry:CGFloat {
+        return lendth * 0.9
+    }
+    var offSetDx:CGFloat {
+        return xAxisRangeOnGeometry / CGFloat(counter)
+    }
       
-      func culcOffsetY(_ index: Int) -> CGFloat {
-          return  self.offSetDx * CGFloat(index) - lendth * 0.5
-      }
+    func culcOffsetY(_ index: Int) -> CGFloat {
+        return  self.offSetDx * CGFloat(index) - lendth * 0.5
+    }
       
-      func lavel(at index:Int) -> String {
-          let num = self.min + dx *  CGFloat(index)
+    func lavel(at index:Int) -> String {
+        let num = self.min + dx *  CGFloat(index)
         return String(format:self.stringFormat, num)
-      }
-      public var body: some View{
-          ZStack(alignment: .trailing){
-              ForEach(Array(0...counter ), id: \.self) { index in
-                  XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetY(index))
-              }
-          }.frame(width : self.lendth)
-          
-      }
+    }
+    public var body: some View{
+        ZStack(alignment: .trailing){
+            ForEach(Array(0...counter ), id: \.self) { index in
+                XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetY(index))
+            }
+        }.frame(width : self.lendth)
+    }
 }
 
 struct XAxixNumbers:View {
