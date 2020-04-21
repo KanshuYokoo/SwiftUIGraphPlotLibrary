@@ -10,13 +10,20 @@ import SwiftUI
 
 public struct GraphView: View {
     let grapFrameSize:CGSize
-    let dataSet:[PlotData]
+    let graphWidth:CGFloat
+    let graphHeight:CGFloat
+
+    let isXticks:Bool
+    let isYticks:Bool
     
-    public let frameView:FrameView
+    
+    public var frameView:FrameView
     public var plotView:PlotView
+    public var xTicksView:BottomAxisView
+    public var yTicksView:LeadingAxisView
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil) {
-        self.dataSet = dataSet
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
+        
         self.grapFrameSize = frameSize
         
         if let frameView = frameView {
@@ -24,33 +31,31 @@ public struct GraphView: View {
         } else {
             self.frameView = FrameView()
         }
+        
+        self.graphWidth = frameSize.width
+        self.graphHeight = frameSize.height
         
         self.plotView = PlotView(dataSet: dataSet, plotTypes: plotTypes)
+        
+        self.isXticks = xTicks
+        self.isYticks = yTicks
+        
+        yTicksView = LeadingAxisView(dataSet: dataSet, height: self.graphHeight)
+        xTicksView = BottomAxisView(dataSet: dataSet, lendth: self.graphWidth)
     }
     
-    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil) {
-        self.dataSet = dataSet
-        self.grapFrameSize = frameSize
+    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
         
-        if let frameView = frameView {
-            self.frameView = frameView
-        } else {
-            self.frameView = FrameView()
-        }
-        self.plotView = PlotView(dataSet: dataSet, plotTypes: [plotType])
+        self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks)
     }
-
-    var graphWidth:CGFloat {
-        self.grapFrameSize.width
-    }
-    var graphHeight:CGFloat {
-        self.grapFrameSize.height
-    }
+    
     public var body: some View {
-        VStack(alignment: .trailing, spacing: 5.0) {
+        VStack(alignment: .center, spacing: 5.0) {
             HStack {
                 //asix label
-                LeadingAxisView(dataSet: self.dataSet, height: self.graphHeight)
+                if self.isYticks{
+                    self.yTicksView
+               }
                 //graph
                 ZStack{
                     self.frameView
@@ -60,15 +65,20 @@ public struct GraphView: View {
             }
             
             //bottom
-            HStack {
-                Spacer()
-                BottomAxisView(dataSet: self.dataSet, lendth: self.graphWidth).frame(width: self.graphWidth)
+            if self.isXticks {
+                HStack {
+                    if self.isYticks{
+                        Spacer()
+                    }
+                    xTicksView.frame(width: self.graphWidth)
+                }
             }
         }
         
-        
     }
 }
+
+
 
 public struct FrameView:View {
     let xGridLine:Int
@@ -185,7 +195,7 @@ struct GraphView_Previews: PreviewProvider {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
         let plotType = GraphPlot(type: .linePlot)
         
-        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200) ).frame(width: 350, height: 250, alignment: .center)
+        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).frame(width: 350, height: 250, alignment: .center)
     }
 }
 

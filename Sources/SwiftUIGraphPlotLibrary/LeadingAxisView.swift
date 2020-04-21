@@ -59,6 +59,8 @@ struct YAxixNumbers:View {
     
     var body: some View{
         Text(self.text)
+            .font(.footnote)
+            .fontWeight(.thin)
             .frame(alignment: .trailing)
             .offset( y: self.offsetY)
     }
