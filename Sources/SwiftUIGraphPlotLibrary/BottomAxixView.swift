@@ -62,7 +62,9 @@ struct XAxixNumbers:View {
     
     var body: some View{
         Text(self.text)
-            .frame(alignment: .trailing)
+            .font(.footnote)
+            .fontWeight(.thin)
+            .frame(alignment: .leading)
             .offset( x: self.offsetX)
     }
 }
