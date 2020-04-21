@@ -25,7 +25,7 @@ public struct BottomAxisView: View {
         dataSet.max(\.x) ?? lendth
     }
     var min:CGFloat {
-        dataSet.min(\.y) ?? 0.0
+        dataSet.min(\.x) ?? 0.0
     }
       
     var dx :CGFloat {
