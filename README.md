@@ -36,6 +36,25 @@ var body: some View {
 ```
 ![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/LinePlot.png)
 
+#### -- Vertical Bar plot --
+```swift
+struct BarPlot:View {
+    var body:some View{
+        let plotset:[PlotData] = [PlotData(x: 0.0,y: 0.0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 5.0),
+                                  PlotData(x: 3.0,y: 3.0),PlotData(x: 4.0,y: 8.0),PlotData(x: 5.0,y: 10.0),
+                                  PlotData(x: 6.0,y: 25.0),PlotData(x: 7.0,y: 21.0),PlotData(x: 8.0,y: 23.0),
+                                  PlotData(x: 9.0,y: 22.0),PlotData(x: 9.6,y: 21.0),PlotData(x: 10,y: 30.0)]
+            
+        let plotView = GraphPlot(type: .verticalBar, color: .blue)
+            let frameSize = CGSize(width: 300, height: 200)
+            
+        return GraphView(dataSet: plotset, plotType: plotView, frameSize: frameSize, xTicks: true, yTicks: true)
+               .frame(width: 350, height: 250, alignment: .center)
+        }
+}
+```
+![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/BarPlot.png)
+
 #### -- Bubble plot --
 ``` swift
 import SwiftUI
@@ -62,6 +81,7 @@ var body: some View {
  }
 }
 ```
+
 
 ![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/BubblePlot.png)
 
