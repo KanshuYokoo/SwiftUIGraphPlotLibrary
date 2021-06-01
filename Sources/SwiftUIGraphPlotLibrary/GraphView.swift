@@ -16,9 +16,11 @@ public struct GraphView: View {
     let isXticks:Bool
     let isYticks:Bool
     
+    let dataSet:[PlotData]
+    let plotTypes:[GraphPlot]
     
     public var frameView:FrameView
-    public var plotView:PlotView
+   // public var plotView:PlotView
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
     
@@ -35,7 +37,10 @@ public struct GraphView: View {
         self.graphWidth = frameSize.width
         self.graphHeight = frameSize.height
         
-        self.plotView = PlotView(dataSet: dataSet, plotTypes: plotTypes)
+        //self.plotView = PlotView(dataSet: dataSet, plotTypes: plotTypes)
+        
+        self.dataSet = dataSet
+        self.plotTypes = plotTypes
         
         self.isXticks = xTicks
         self.isYticks = yTicks
@@ -56,10 +61,12 @@ public struct GraphView: View {
                 if self.isYticks{
                     self.yTicksView
                }
+                GeometryReader {proxy in
                 //graph
                 ZStack{
                     self.frameView
-                    self.plotView
+                        PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy)
+                    }
                 }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
                 
             }
@@ -109,28 +116,42 @@ public struct FrameView:View {
 public struct PlotView: View {
     let dataSet:[PlotData]
     let plotSet:[GraphPlot]
+    let geoProxy: GeometryProxy
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot]) {
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], geometryproxy:GeometryProxy) {
         self.dataSet = dataSet
         self.plotSet = plotTypes
+        self.geoProxy = geometryproxy
     }
     
-    func getGraphPlotView(from plot:GraphPlot, geometryProxy:GeometryProxy) -> GraphPlotView {
-        return GraphPlotView(geometryProxy: geometryProxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc)
+    public var body:some View {
+        return
+            ZStack {
+                    ForEach(0..<self.plotSet.count) { index in
+                        PlotingPartView(dataSet: self.dataSet, plotType: self.plotSet[index], geometryProxy: geoProxy)
+                        }
+                }
+        
+    }
+}
+
+public struct PlotingPartView: View {
+    let dataSet:[PlotData]
+    let plot:GraphPlot
+    let proxy:GeometryProxy
+    
+    public init(dataSet:[PlotData], plotType:GraphPlot, geometryProxy:GeometryProxy) {
+        self.dataSet = dataSet
+        self.plot = plotType
+        self.proxy = geometryProxy
     }
     public var body:some View {
+        return GraphPlotView(geometryProxy: proxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc)
         
-        GeometryReader {proxy in
-            
-        return ZStack{
-            ForEach(0..<self.plotSet.count) { index in
-                self.getGraphPlotView(from: self.plotSet[index], geometryProxy: proxy)
-                }
-            }
-        }
     }
-    
+
 }
+
 
 public struct GraphPlot {
     
