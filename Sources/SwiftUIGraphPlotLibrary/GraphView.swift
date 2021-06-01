@@ -20,7 +20,6 @@ public struct GraphView: View {
     let plotTypes:[GraphPlot]
     
     public var frameView:FrameView
-   // public var plotView:PlotView
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
     
@@ -36,9 +35,7 @@ public struct GraphView: View {
         
         self.graphWidth = frameSize.width
         self.graphHeight = frameSize.height
-        
-        //self.plotView = PlotView(dataSet: dataSet, plotTypes: plotTypes)
-        
+                
         self.dataSet = dataSet
         self.plotTypes = plotTypes
         
