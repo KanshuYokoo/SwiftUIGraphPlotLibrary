@@ -73,7 +73,7 @@ struct BottomAxisView_Previews: PreviewProvider {
      
     static var previews: some View {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
-        return BottomAxisView(dataSet: plotset, lendth: 300)
+        return BottomAxisView(dataSet: plotset, length: 300)
     }
 }
 
