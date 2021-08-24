@@ -39,7 +39,7 @@ public struct BottomAxisView: View {
         return xAxisRangeOnGeometry / CGFloat(counter)
     }
       
-    func culcOffsetY(_ index: Int) -> CGFloat {
+    func culcOffsetX(_ index: Int) -> CGFloat {
         return  self.offSetDx * CGFloat(index) - lendth * 0.5
     }
       
@@ -50,7 +50,7 @@ public struct BottomAxisView: View {
     public var body: some View{
         ZStack(alignment: .trailing){
             ForEach(Array(0...counter ), id: \.self) { index in
-                XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetY(index))
+                XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetX(index))
             }
         }.frame(width : self.lendth)
     }
