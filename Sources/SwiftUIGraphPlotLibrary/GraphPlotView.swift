@@ -14,22 +14,6 @@ public enum PlotType {
     case verticalBar
 }
 
-public struct PlotData:Equatable {
-    var x:CGFloat
-    var y:CGFloat
-    public init(x:CGFloat, y:CGFloat) {
-        self.x = x
-        self.y = y
-    }
-    
-    public func getX() -> CGFloat {
-        return self.x
-    }
-    public func getY() -> CGFloat {
-        return self.y
-    }
-}
-
 public typealias RadiusFunc = (Int) -> CGFloat
 public typealias ColorFunc = (Int) -> Color
 public typealias HueDegreeFunc = (Int) -> Double
