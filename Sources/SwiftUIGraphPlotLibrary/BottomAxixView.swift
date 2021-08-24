@@ -14,9 +14,9 @@ public struct BottomAxisView: View {
     let counter:Int
     let stringFormat:String
     
-    init(dataSet:[PlotData], lendth:CGFloat, counter:Int = 5, format:String = "%.1f") {
+    init(dataSet:[PlotData], length:CGFloat, counter:Int = 5, format:String = "%.1f") {
         self.dataSet = dataSet
-        self = lendth
+        self.length = length
         self.counter = counter
         self.stringFormat = format
     }
