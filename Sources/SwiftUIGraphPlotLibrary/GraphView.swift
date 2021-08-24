@@ -22,6 +22,7 @@ public struct GraphView: View {
     public var frameView:FrameView
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
+    public var trailingPlotOffset:CGFloat = 15
     
     public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
         
@@ -77,7 +78,7 @@ public struct GraphView: View {
                     xTicksView.frame(width: self.graphWidth)
                 }
             }
-        }.offset(x:-15)
+        }.offset(x:-self.trailingPlotOffset)
     }
 }
 
