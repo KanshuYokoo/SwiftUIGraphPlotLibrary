@@ -12,7 +12,6 @@ public struct GraphView: View {
     let grapFrameSize:CGSize
     let graphWidth:CGFloat
     let graphHeight:CGFloat
-    let trailingPlotOffset:CGFloat = 15
 
     let isXticks:Bool
     let isYticks:Bool
