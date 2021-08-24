@@ -10,19 +10,19 @@ import SwiftUI
 
 public struct BottomAxisView: View {
     let dataSet:[PlotData]
-    let lendth:CGFloat
+    let length:CGFloat
     let counter:Int
     let stringFormat:String
     
     init(dataSet:[PlotData], lendth:CGFloat, counter:Int = 5, format:String = "%.1f") {
         self.dataSet = dataSet
-        self.lendth = lendth
+        self = lendth
         self.counter = counter
         self.stringFormat = format
     }
     
     var max:CGFloat {
-        dataSet.max(\.x) ?? lendth
+        dataSet.max(\.x) ?? length
     }
     var min:CGFloat {
         dataSet.min(\.x) ?? 0.0
@@ -33,14 +33,14 @@ public struct BottomAxisView: View {
     }
     // The edge of x-axis on geometry reader frame
     var xAxisRangeOnGeometry:CGFloat {
-        return lendth * 0.9
+        return length * 0.9
     }
     var offSetDx:CGFloat {
         return xAxisRangeOnGeometry / CGFloat(counter)
     }
       
     func culcOffsetX(_ index: Int) -> CGFloat {
-        return  self.offSetDx * CGFloat(index) - lendth * 0.5
+        return  self.offSetDx * CGFloat(index) - length * 0.5
     }
       
     func lavel(at index:Int) -> String {
@@ -52,7 +52,7 @@ public struct BottomAxisView: View {
             ForEach(Array(0...counter ), id: \.self) { index in
                 XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetX(index))
             }
-        }.frame(width : self.lendth)
+        }.frame(width : self.length)
     }
 }
 
