@@ -31,12 +31,9 @@ public struct BottomAxisView: View {
     var dx :CGFloat {
         return (max - min) / CGFloat(counter)
     }
-    // The edge of x-axis on geometry reader frame
-    var xAxisRangeOnGeometry:CGFloat {
-        return length * 1
-    }
+
     var offSetDx:CGFloat {
-        return xAxisRangeOnGeometry / CGFloat(counter)
+        return length / CGFloat(counter)
     }
       
     func culcOffsetX(_ index: Int) -> CGFloat {
