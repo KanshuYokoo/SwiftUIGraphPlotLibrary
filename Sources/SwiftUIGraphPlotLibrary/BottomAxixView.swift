@@ -43,14 +43,14 @@ public struct BottomAxisView: View {
         return  self.offSetDx * CGFloat(index) - length * 0.5
     }
       
-    func lavel(at index:Int) -> String {
+    func label(at index:Int) -> String {
         let num = self.min + dx *  CGFloat(index)
         return String(format:self.stringFormat, num)
     }
     public var body: some View{
         ZStack(alignment: .trailing){
             ForEach(Array(0...counter ), id: \.self) { index in
-                XAxixNumbers(text:self.lavel(at: index), offsetX: self.culcOffsetX(index))
+                XAxixNumbers(text:self.label(at: index), offsetX: self.culcOffsetX(index))
             }
         }.frame(width : self.length)
     }
