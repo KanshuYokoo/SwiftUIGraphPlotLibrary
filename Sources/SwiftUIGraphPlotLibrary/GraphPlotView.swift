@@ -103,7 +103,7 @@ public struct GraphPlotView:View {
     ///
     // The edge of x-axis on geometry reader frame
     var xAxisRangeOnGeometry:CGFloat {
-        return self.geometryProxy.size.width * 0.9
+        return self.geometryProxy.size.width * 1
     }
     
     var xratio:CGFloat {
