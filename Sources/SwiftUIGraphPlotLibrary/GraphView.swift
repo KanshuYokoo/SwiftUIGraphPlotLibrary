@@ -72,13 +72,11 @@ public struct GraphView: View {
             //bottom
             if self.isXticks {
                 HStack {
-                    if self.isYticks{
-                        Spacer()
-                    }
+
                     xTicksView.frame(width: self.graphWidth)
                 }
             }
-        }.offset(x:-self.trailingPlotOffset)
+        }
     }
 }
 
@@ -213,7 +211,7 @@ struct GraphView_Previews: PreviewProvider {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
         let plotType = GraphPlot(type: .linePlot)
         
-        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).frame(width: 350, height: 250, alignment: .center)
+        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).padding()
     }
 }
 
