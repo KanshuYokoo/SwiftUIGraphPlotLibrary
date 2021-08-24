@@ -52,7 +52,7 @@ public struct GraphView: View {
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 5.0) {
+        VStack(alignment: .trailing, spacing: 5.0) {
             HStack {
                 //asix label
                 if self.isYticks{
@@ -60,10 +60,10 @@ public struct GraphView: View {
                }
                 GeometryReader {proxy in
                 //graph
-                ZStack{
-                    self.frameView
+                    ZStack{
+                        self.frameView
                         PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy)
-                    }
+                        }
                 }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
                 
             }
@@ -77,8 +77,7 @@ public struct GraphView: View {
                     xTicksView.frame(width: self.graphWidth)
                 }
             }
-        }
-        
+        }.offset(x:-15)
     }
 }
 

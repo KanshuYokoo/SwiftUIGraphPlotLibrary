@@ -33,7 +33,7 @@ public struct BottomAxisView: View {
     }
     // The edge of x-axis on geometry reader frame
     var xAxisRangeOnGeometry:CGFloat {
-        return length * 0.9
+        return length * 1
     }
     var offSetDx:CGFloat {
         return xAxisRangeOnGeometry / CGFloat(counter)
@@ -48,7 +48,7 @@ public struct BottomAxisView: View {
         return String(format:self.stringFormat, num)
     }
     public var body: some View{
-        ZStack(alignment: .trailing){
+        ZStack(alignment: .top){
             ForEach(Array(0...counter ), id: \.self) { index in
                 XAxixNumbers(text:self.label(at: index), offsetX: self.culcOffsetX(index))
             }
