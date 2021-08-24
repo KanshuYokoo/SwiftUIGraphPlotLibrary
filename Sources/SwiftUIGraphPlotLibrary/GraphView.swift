@@ -12,6 +12,7 @@ public struct GraphView: View {
     let grapFrameSize:CGSize
     let graphWidth:CGFloat
     let graphHeight:CGFloat
+    let trailingPlotOffset:CGFloat = 15
 
     let isXticks:Bool
     let isYticks:Bool
@@ -22,7 +23,7 @@ public struct GraphView: View {
     public var frameView:FrameView
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
-    public var trailingPlotOffset:CGFloat = 15
+
     
     public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
         
@@ -56,9 +57,7 @@ public struct GraphView: View {
         VStack(alignment: .trailing, spacing: 5.0) {
             HStack {
                 //asix label
-                if self.isYticks{
-                    self.yTicksView
-               }
+                self.isYticks ? self.yTicksView:nil
                 GeometryReader {proxy in
                 //graph
                     ZStack{
@@ -70,17 +69,11 @@ public struct GraphView: View {
             }
             
             //bottom
-            if self.isXticks {
-                HStack {
-
-                    xTicksView.frame(width: self.graphWidth)
-                }
-            }
+            self.isXticks ? xTicksView.frame(width: self.graphWidth):nil
+            
         }
     }
 }
-
-
 
 public struct FrameView:View {
     let xGridLine:Int
@@ -146,7 +139,6 @@ public struct PlotingPartView: View {
     }
 
 }
-
 
 public struct GraphPlot {
     
