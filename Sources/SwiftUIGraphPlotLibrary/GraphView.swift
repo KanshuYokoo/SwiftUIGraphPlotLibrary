@@ -22,6 +22,7 @@ public struct GraphView: View {
     public var frameView:FrameView
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
+
     
     public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
         
@@ -43,7 +44,7 @@ public struct GraphView: View {
         self.isYticks = yTicks
         
         yTicksView = LeadingAxisView(dataSet: dataSet, height: self.graphHeight)
-        xTicksView = BottomAxisView(dataSet: dataSet, lendth: self.graphWidth)
+        xTicksView = BottomAxisView(dataSet: dataSet, length: self.graphWidth)
     }
     
     public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
@@ -52,37 +53,26 @@ public struct GraphView: View {
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 5.0) {
+        VStack(alignment: .trailing, spacing: 5.0) {
             HStack {
                 //asix label
-                if self.isYticks{
-                    self.yTicksView
-               }
+                self.isYticks ? self.yTicksView:nil
                 GeometryReader {proxy in
                 //graph
-                ZStack{
-                    self.frameView
+                    ZStack{
+                        self.frameView
                         PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy)
-                    }
+                        }
                 }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
                 
             }
             
             //bottom
-            if self.isXticks {
-                HStack {
-                    if self.isYticks{
-                        Spacer()
-                    }
-                    xTicksView.frame(width: self.graphWidth)
-                }
-            }
+            self.isXticks ? xTicksView.frame(width: self.graphWidth):nil
+            
         }
-        
     }
 }
-
-
 
 public struct FrameView:View {
     let xGridLine:Int
@@ -149,7 +139,6 @@ public struct PlotingPartView: View {
 
 }
 
-
 public struct GraphPlot {
     
     let plotType:PlotType
@@ -213,7 +202,7 @@ struct GraphView_Previews: PreviewProvider {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
         let plotType = GraphPlot(type: .linePlot)
         
-        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).frame(width: 350, height: 250, alignment: .center)
+        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).padding()
     }
 }
 
