@@ -43,7 +43,7 @@ public struct GraphView: View {
         self.isYticks = yTicks
         
         yTicksView = LeadingAxisView(dataSet: dataSet, height: self.graphHeight)
-        xTicksView = BottomAxisView(dataSet: dataSet, lendth: self.graphWidth)
+        xTicksView = BottomAxisView(dataSet: dataSet, length: self.graphWidth)
     }
     
     public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
