@@ -49,15 +49,20 @@ public struct GraphPlotView:View {
     var colorFunc: ColorFunc?
     var hueDegreeFunc: HueDegreeFunc?
     
-    public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red) {
+    var xPlotAreaFactor: CGFloat = 1.0
+    
+    public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red, xPlotAreaFactor:CGFloat? = nil) {
         self.geometryProxy = geometryProxy
         self.dataSet = dataSet
         self.color = color
         self.plotType = type
         self.plotsCount = dataSet.count
+        if let xPlotFactor = xPlotAreaFactor {
+            self.xPlotAreaFactor = xPlotFactor
+        }
     }
     
-    public init(geometryProxy:GeometryProxy, type:PlotType,  dataSet:[PlotData], color:Color?, opacity:Double?, circleRadius:CGFloat?,  hueDegree:Double? ,circleRadiusFunc: RadiusFunc?, colorFunc: ColorFunc?,hueDegreeFunc: HueDegreeFunc?) {
+    public init(geometryProxy:GeometryProxy, type:PlotType,  dataSet:[PlotData], color:Color?, opacity:Double?, circleRadius:CGFloat?,  hueDegree:Double? ,circleRadiusFunc: RadiusFunc?, colorFunc: ColorFunc?,hueDegreeFunc: HueDegreeFunc?, xPlotAreaFactor:CGFloat? = nil) {
         self.geometryProxy = geometryProxy
         self.dataSet = dataSet
         self.plotType = type
@@ -75,7 +80,10 @@ public struct GraphPlotView:View {
         self.circleRadiusFunc = circleRadiusFunc
         self.colorFunc = colorFunc
         self.hueDegreeFunc = hueDegreeFunc
-        
+        if let xPlotFactor = xPlotAreaFactor {
+            self.xPlotAreaFactor = xPlotFactor
+        }
+
     }
     
     //todo make plotData protocol
@@ -103,7 +111,7 @@ public struct GraphPlotView:View {
     ///
     // The edge of x-axis on geometry reader frame
     var xAxisRangeOnGeometry:CGFloat {
-        return self.geometryProxy.size.width * 1
+        return self.geometryProxy.size.width * self.xPlotAreaFactor
     }
     
     var xratio:CGFloat {
@@ -326,7 +334,7 @@ struct GraphPlotView_Previews: PreviewProvider {
             GeometryReader { proxy in
                 ZStack {
                     GraphFrameView(geometryProxy:proxy)
-                    GraphPlotView(type:.verticalBar, geometryProxy: proxy, dataSet: plotset2).setHueDegreeFunc(function: {index in
+                    GraphPlotView(type:.verticalBar, geometryProxy: proxy, dataSet: plotset2, xPlotAreaFactor: 0.9 ).setHueDegreeFunc(function: {index in
                         return Double(plotset2[index].y * 90 / 23)})
                 }
             }.frame(width: 300, height: 200, alignment: .center)
@@ -334,7 +342,7 @@ struct GraphPlotView_Previews: PreviewProvider {
             GeometryReader { proxy in
                            ZStack {
                                GraphFrameView(geometryProxy:proxy)
-                            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2).setCircle(color:.blue){index in plotset2[index].y * 1.4}
+                            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2, xPlotAreaFactor: 0.9).setCircle(color:.blue){index in plotset2[index].y * 1.4}
                                 .setHueDegreeFunc{ index in
                                     return Double(plotset2[index].y * 90 / 23)
                             }
