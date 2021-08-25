@@ -23,8 +23,9 @@ public struct GraphView: View {
     public var xTicksView:BottomAxisView
     public var yTicksView:LeadingAxisView
 
+    var xPlotAreaFactor:CGFloat?
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
         
         self.grapFrameSize = frameSize
         
@@ -43,13 +44,23 @@ public struct GraphView: View {
         self.isXticks = xTicks
         self.isYticks = yTicks
         
+        //call this before xTicksView initialization.
+        if let xfactor = xPlotAreaFactor {
+            if (xfactor <= 1.0)  {
+                self.xPlotAreaFactor = xfactor
+            } else {
+                self.xPlotAreaFactor = 1.0
+            }
+        }
+        
         yTicksView = LeadingAxisView(dataSet: dataSet, height: self.graphHeight)
-        xTicksView = BottomAxisView(dataSet: dataSet, length: self.graphWidth)
+        xTicksView = BottomAxisView(dataSet: dataSet, length: self.graphWidth, xAxsisScaleParameter: self.xPlotAreaFactor)
+        
     }
     
-    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false) {
+    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
         
-        self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks)
+        self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
     }
     
     public var body: some View {
@@ -61,7 +72,7 @@ public struct GraphView: View {
                 //graph
                     ZStack{
                         self.frameView
-                        PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy)
+                        PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy, xPlotAreaFactor: self.xPlotAreaFactor)
                         }
                 }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
                 
@@ -104,18 +115,20 @@ public struct PlotView: View {
     let dataSet:[PlotData]
     let plotSet:[GraphPlot]
     let geoProxy: GeometryProxy
+    let xPlotAreaFactor:CGFloat?
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], geometryproxy:GeometryProxy) {
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], geometryproxy:GeometryProxy, xPlotAreaFactor:CGFloat?) {
         self.dataSet = dataSet
         self.plotSet = plotTypes
         self.geoProxy = geometryproxy
+        self.xPlotAreaFactor = xPlotAreaFactor
     }
     
     public var body:some View {
         return
             ZStack {
                     ForEach(0..<self.plotSet.count) { index in
-                        PlotingPartView(dataSet: self.dataSet, plotType: self.plotSet[index], geometryProxy: geoProxy)
+                        PlotingPartView(dataSet: self.dataSet, plotType: self.plotSet[index], geometryProxy: geoProxy, xPlotAreaFactor: self.xPlotAreaFactor)
                         }
                 }
         
@@ -126,14 +139,16 @@ public struct PlotingPartView: View {
     let dataSet:[PlotData]
     let plot:GraphPlot
     let proxy:GeometryProxy
+    let xPlotAreaFactor:CGFloat?
     
-    public init(dataSet:[PlotData], plotType:GraphPlot, geometryProxy:GeometryProxy) {
+    public init(dataSet:[PlotData], plotType:GraphPlot, geometryProxy:GeometryProxy, xPlotAreaFactor:CGFloat? = nil) {
         self.dataSet = dataSet
         self.plot = plotType
         self.proxy = geometryProxy
+        self.xPlotAreaFactor = xPlotAreaFactor
     }
     public var body:some View {
-        return GraphPlotView(geometryProxy: proxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc)
+        return GraphPlotView(geometryProxy: proxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc, xPlotAreaFactor: self.xPlotAreaFactor)
         
     }
 
@@ -152,7 +167,7 @@ public struct GraphPlot {
     var circleRadiusFunc: RadiusFunc?
     var colorFunc: ColorFunc?
     var hueDegreeFunc: HueDegreeFunc?
-    
+        
     public init(type:PlotType,  dataSet:[PlotData]? = nil, color:Color? = nil, opacity:Double? = nil, circleRadius:CGFloat? = nil,  hueDegree:Double? = nil) {
         
         self.plotType = type
@@ -202,7 +217,7 @@ struct GraphView_Previews: PreviewProvider {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
         let plotType = GraphPlot(type: .linePlot)
         
-        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true ).padding()
+        return GraphView(dataSet: plotset,plotType: plotType, frameSize: CGSize(width: 300, height: 200), xTicks: true, yTicks: true).padding()
     }
 }
 

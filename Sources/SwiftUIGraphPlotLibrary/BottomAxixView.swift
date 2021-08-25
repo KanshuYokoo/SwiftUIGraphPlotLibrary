@@ -13,12 +13,16 @@ public struct BottomAxisView: View {
     let length:CGFloat
     let counter:Int
     let stringFormat:String
+    var xAxsisScaleParameter : CGFloat = 1.0
     
-    init(dataSet:[PlotData], length:CGFloat, counter:Int = 5, format:String = "%.1f") {
+    init(dataSet:[PlotData], length:CGFloat, counter:Int = 5, format:String = "%.1f", xAxsisScaleParameter:CGFloat? ) {
         self.dataSet = dataSet
         self.length = length
         self.counter = counter
         self.stringFormat = format
+        if let xFactor = xAxsisScaleParameter {
+            self.xAxsisScaleParameter = xFactor
+        }
     }
     
     var max:CGFloat {
@@ -33,7 +37,7 @@ public struct BottomAxisView: View {
     }
 
     var offSetDx:CGFloat {
-        return length / CGFloat(counter)
+        return length / CGFloat(counter) * self.xAxsisScaleParameter
     }
       
     func culcOffsetX(_ index: Int) -> CGFloat {
@@ -44,6 +48,7 @@ public struct BottomAxisView: View {
         let num = self.min + dx *  CGFloat(index)
         return String(format:self.stringFormat, num)
     }
+    
     public var body: some View{
         ZStack(alignment: .top){
             ForEach(Array(0...counter ), id: \.self) { index in
@@ -70,7 +75,7 @@ struct BottomAxisView_Previews: PreviewProvider {
      
     static var previews: some View {
         let plotset:[PlotData] = [PlotData(x: 0,y: 0),PlotData(x: 1.0,y: 2.0),PlotData(x: 2.0,y: 3.0),PlotData(x: 3.0,y: 2.0),PlotData(x: 4.0,y: 7.0),PlotData(x: 40.0,y: 20.0)]
-        return BottomAxisView(dataSet: plotset, length: 300)
+        return BottomAxisView(dataSet: plotset, length: 300, xAxsisScaleParameter: 0.9)
     }
 }
 
