@@ -57,7 +57,7 @@ public struct GraphFrameView: View {
     public init(geometryProxy proxy:GeometryProxy,x:Int = 10, y:Int = 10, color:Color = .gray, type:frameType = .normal,gridX:Bool = true, gridY:Bool = true) {
         self.geometryProxy = proxy
         self.color = color
-        self.xgridNumber = (x == 0) ? 1 : x
+        self.xgridNumber = (x == 0) ? 1 : (x - 1)
         self.ygridNumber = (y == 0) ? 1 : y
         
         self.frameWidth = proxy.size.width * 0.9
