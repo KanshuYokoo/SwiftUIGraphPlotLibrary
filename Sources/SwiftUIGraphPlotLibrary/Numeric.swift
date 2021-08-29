@@ -13,7 +13,7 @@ import CoreGraphics
 //This solution was from stockoverfolw
 //https://stackoverflow.com/questions/39486362/how-to-cast-generic-number-type-t-to-cgfloat
 
-protocol Numeric : Comparable {
+public protocol Numeric : Comparable {
 
     init(_ v:Float)
     init(_ v:Double)
@@ -36,16 +36,16 @@ extension Numeric {
     init<T:Numeric>(fromNumeric numeric: T) { self = numeric._asOther() }
 }
 
-extension Float   : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Double  : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension CGFloat : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Int     : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Int8    : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Int16   : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Int32   : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension Int64   : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension UInt    : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension UInt8   : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension UInt16  : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension UInt32  : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
-extension UInt64  : Numeric {func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Float   : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Double  : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension CGFloat : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Int     : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Int8    : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Int16   : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Int32   : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension Int64   : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension UInt    : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension UInt8   : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension UInt16  : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension UInt32  : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
+extension UInt64  : Numeric {public func _asOther<T:Numeric>() -> T { return T(self) }}
