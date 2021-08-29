@@ -24,21 +24,14 @@ public struct PlotData:Equatable {
     }
 }
 
-
-public func convertArrayToPlotData<T1,T2>(xarray:[T1], yarray:[T2]) throws -> [PlotData] {
+func convertArrayToPlotData<T1:Numeric,T2:Numeric>(xarray:[T1], yarray:[T2]) throws -> [PlotData] {
     var returnValue:[PlotData] = []
     if (xarray.count != yarray.count) {
         throw dataSetError.arraySize(x: xarray.count, y: yarray.count)
     }
-    for (index, (x_value,y_value)) in zip(xarray, yarray).enumerated()
-    {
-        guard let x = x_value as? CGFloat else {
-            throw dataSetError.castErrar(value: x_value, index: index, axis:"X")
-        }
-        guard let y = y_value as? CGFloat else {
-            throw dataSetError.castErrar(value: y_value, index: index, axis:"Y")
-        }
-        returnValue.append(PlotData(x: x, y: y))
+    for (_, (x_value,y_value)) in zip(xarray, yarray).enumerated()
+    {        
+        returnValue.append(PlotData(x: CGFloat(fromNumeric: x_value), y: CGFloat(fromNumeric: y_value)))
     }
     return returnValue
 }
