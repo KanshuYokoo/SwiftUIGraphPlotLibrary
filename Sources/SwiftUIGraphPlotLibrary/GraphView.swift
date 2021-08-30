@@ -63,6 +63,17 @@ public struct GraphView: View {
         self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
     }
     
+    public init<T1:Numeric,T2:Numeric>(xArray:[T1],yArray:[T2], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
+        
+        var dataSet:[PlotData]
+        do {
+            dataSet = try convertArrayToPlotData(xarray: xArray, yarray: yArray)
+        } catch {
+            dataSet = []
+        }
+        self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
+    }
+    
     public var body: some View {
         VStack(alignment: .trailing, spacing: 5.0) {
             HStack {
