@@ -70,6 +70,9 @@ public struct GraphView: View {
             dataSet = try convertArrayToPlotData(xarray: xArray, yarray: yArray)
         } catch {
             dataSet = []
+            //todo
+            //show better error message
+            print("Error : \(error)")
         }
         self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
     }
