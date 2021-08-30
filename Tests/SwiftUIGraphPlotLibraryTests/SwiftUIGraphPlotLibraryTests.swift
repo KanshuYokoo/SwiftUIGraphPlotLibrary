@@ -10,6 +10,7 @@ final class SwiftUIGraphPlotLibraryTests: XCTestCase {
         super.setUp()
         xarryInt5 = [1,2,3,4,5]
         yarryInt5 = [1,4,9,16,25]
+        
     }
     
     //MARK:PlotData
@@ -25,9 +26,25 @@ final class SwiftUIGraphPlotLibraryTests: XCTestCase {
         }
     }
     
+    func testConvertLargeArrayToPlotData() {
+        var xarrayDouble:[Double] = []
+        var yarrayDouble:[Double] = []
+        var expect:[PlotData] = []
+        for i in 1...10000 {
+            xarrayDouble.append(Double(i))
+            yarrayDouble.append(Double(i * i))
+            expect.append(PlotData(x: CGFloat(i), y: CGFloat(i * i)))
+        }
+        do {
+            let result = try convertArrayToPlotData(xarray: xarrayDouble, yarray: yarrayDouble)
+            XCTAssertEqual(result, expect)
+        } catch {
+            XCTFail("Failed: \(error)")
+        }
+    }
     
-
     static var allTests = [
-        ("testExample", testConvertArrayToPlotData),
+        ("testConvertArrayToPlotData", testConvertArrayToPlotData),
+        ("testConvertLargeArrayToPlotData", testConvertLargeArrayToPlotData),
     ]
 }
