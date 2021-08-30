@@ -110,6 +110,28 @@ struct MultiPlot:View {
 ```
 ![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/MultiPlot.png)
 
+#### -- Plotting using two x,y data arrays --
+It is possible to plot using two separated arrays of x, y data from ver1.0.4 and later.
+Int, Double, Float, and CGFloat are supported type of elements of arrays 
+
+```swift
+struct arrayPlotInt: View {
+    var body: some View {
+        
+        let xarryInt5:[Int] = [1,2,3,4,5]
+        let yarryInt5:[Int] = [1,4,9,16,25]
+                
+        let bublePlot = GraphPlot(type: .circlePlot, color: .blue)
+        
+        let frameSize = CGSize(width: 300, height: 200)
+        return GraphView(xArray:xarryInt5,yArray:yarryInt5, plotType: bublePlot, frameSize: frameSize, xTicks: true, yTicks: true, xPlotAreaFactor: 0.9)
+            .frame(width: 350, height: 250, alignment: .center)
+    }
+}
+```
+![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/twoArraysData.png)
+
+
 ## Contribute
 This program is still under development.
 However If you have any query or need more information, please open an issue.
