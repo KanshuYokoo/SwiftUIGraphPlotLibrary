@@ -131,6 +131,31 @@ struct arrayPlotInt: View {
 ```
 ![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/twoArraysData.png)
 
+#### --Scatter plot --
+
+```swift
+struct scatterPlot: View {
+    var body: some View {
+        
+        var xarry:[Double] = []
+        var yarry:[Double] = []
+                
+        for _ in 1...100 {
+            let x = Double.random(in: 0.0...10)
+            let y = x * (1 + Double.random(in: 0.0...0.4))
+            xarry.append(x)
+            yarry.append(y)
+        }
+        
+        let bublePlot = GraphPlot(type: .circlePlot, color: .blue, circleRadius:4)
+        
+        let frameSize = CGSize(width: 300, height: 200)
+        return GraphView(xArray:xarry,yArray:yarry, plotType: bublePlot, frameSize: frameSize, xTicks: true, yTicks: true, xPlotAreaFactor: 0.9)
+            .frame(width: 350, height: 250, alignment: .center)
+    }
+}
+```
+![alt tag](https://github.com/KanshuYokoo/SwiftUIGraphPlotLibrary/blob/master/screenshots/scatterPlot.png)
 
 ## Contribute
 This program is still under development.
