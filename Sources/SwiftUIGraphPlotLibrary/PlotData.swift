@@ -11,6 +11,7 @@ import CoreGraphics
 public struct PlotData:Equatable {
     var x:CGFloat
     var y:CGFloat
+    
     public init(x:CGFloat, y:CGFloat) {
         self.x = x
         self.y = y
