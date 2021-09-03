@@ -19,12 +19,11 @@ public typealias ColorFunc = (Int) -> Color
 public typealias HueDegreeFunc = (Int) -> Double
 
 public struct GraphPlotView:View {
-    
-    var plotType:PlotType
+        
     var geometryProxy:GeometryProxy
+    var type:PlotType
     let dataSet:[PlotData]
-    let plotsCount:Int
-    var color:Color = Color(red: 60.0 / 255, green: 79.0 / 255, blue: 255.0 / 255)
+    var color:Color = Color.defaultColor
     var opacity:Double = 1.0
     var circleRadius:CGFloat = 10
     var hueDegree:Double = 0.0
@@ -35,56 +34,10 @@ public struct GraphPlotView:View {
     
     var xPlotAreaFactor: CGFloat = 1.0
     
-    public init(type:PlotType, geometryProxy:GeometryProxy, dataSet:[PlotData], color:Color = .red, xPlotAreaFactor:CGFloat? = nil) {
-        self.geometryProxy = geometryProxy
-        self.dataSet = dataSet
-        self.color = color
-        self.plotType = type
-        self.plotsCount = dataSet.count
-        if let xPlotFactor = xPlotAreaFactor {
-            self.xPlotAreaFactor = xPlotFactor
-        }
-    }
-    
-    public init(geometryProxy:GeometryProxy, type:PlotType,  dataSet:[PlotData], color:Color?, opacity:Double?, circleRadius:CGFloat?,  hueDegree:Double? ,circleRadiusFunc: RadiusFunc?, colorFunc: ColorFunc?,hueDegreeFunc: HueDegreeFunc?, xPlotAreaFactor:CGFloat? = nil) {
-        self.geometryProxy = geometryProxy
-        self.dataSet = dataSet
-        self.plotType = type
-        self.plotsCount = dataSet.count
-        
-        if let color = color {
-            self.color = color
-        }
-        if let opacity = opacity {
-            self.opacity = opacity
-        }
-        if let  hueDegree =  hueDegree {
-            self.hueDegree = hueDegree
-        }
-        self.circleRadiusFunc = circleRadiusFunc
-        self.colorFunc = colorFunc
-        self.hueDegreeFunc = hueDegreeFunc
-        if let xPlotFactor = xPlotAreaFactor {
-            self.xPlotAreaFactor = xPlotFactor
-        }
-
-    }
-    
-    //todo make plotData protocol
-    var minX:CGFloat  {
-        return dataSet.map {$0.x}.min() ?? 0.0
-    }
-    var maxX:CGFloat  {
-           return dataSet.map {$0.x}.max() ?? 1.0
-    }
+    let minX:CGFloat,maxX:CGFloat,minY:CGFloat,maxY:CGFloat
+   
     var xAxisL:CGFloat {
         return maxX - minX > 0 ? maxX - minX :1
-    }
-    var minY:CGFloat {
-        return dataSet.map {$0.y}.min() ?? 0.0
-    }
-    var maxY:CGFloat {
-           return dataSet.map {$0.y}.max() ?? 1.0
     }
     var yAxisL:CGFloat {
         return maxY - minY > 0 ?  maxY - minY : 1
@@ -95,7 +48,7 @@ public struct GraphPlotView:View {
     ///
     // The edge of x-axis on geometry reader frame
     var xAxisRangeOnGeometry:CGFloat {
-        return self.geometryProxy.size.width * self.xPlotAreaFactor
+        return geometryProxy.size.width * xPlotAreaFactor
     }
     
     var xratio:CGFloat {
@@ -103,11 +56,11 @@ public struct GraphPlotView:View {
     }
     
     var yratio:CGFloat {
-        return self.geometryProxy.size.height / yAxisL
+        return geometryProxy.size.height / yAxisL
     }
     
     func transfarCorodinate(point:PlotData) -> PlotData {
-        let ytransformed = self.geometryProxy.size.height - point.y * yratio + minY * yratio
+        let ytransformed = geometryProxy.size.height - point.y * yratio + minY * yratio
         let xtrasformed = point.x * xratio
         return PlotData(x: xtrasformed, y: ytransformed )
     }
@@ -119,10 +72,10 @@ public struct GraphPlotView:View {
     }
     
     func getHueDegree(_ index: Int) -> Double {
-           if let hueDegreeFunc = self.hueDegreeFunc {
+           if let hueDegreeFunc = hueDegreeFunc {
                return hueDegreeFunc(index)
            } else {
-               return self.hueDegree
+               return hueDegree
            }
        }
     
@@ -134,27 +87,49 @@ public struct GraphPlotView:View {
     }
         
     func getColor(_ index: Int) -> Color {
-        if let colorFunc = self.colorFunc {
+        if let colorFunc = colorFunc {
             return colorFunc(index)
         } else {
-            return self.color
+            return color
         }
     }
     
     public var body: some View {
         
         ZStack {
-            if (self.plotType == .linePlot) {
-                self.linePlot()
+            if (type == .linePlot) {
+                linePlot()
             }
-            if (self.plotType == .circlePlot) {
-                self.circlePlot()
+            if (type == .circlePlot) {
+                circlePlot()
             }
-            if plotType == .verticalBar {
-                self.verticalBar()
+            if type == .verticalBar {
+                verticalBar()
             }
         }
        
+    }
+}
+
+//MARK: Init
+extension GraphPlotView {
+    public init(geometryProxy: GeometryProxy, type: PlotType, dataSet: [PlotData], color: Color = Color.defaultColor, opacity: Double = 1.0, circleRadius: CGFloat = 10, hueDegree: Double = 0.0, circleRadiusFunc: RadiusFunc? = nil, colorFunc: ColorFunc? = nil, hueDegreeFunc: HueDegreeFunc? = nil, xPlotAreaFactor: CGFloat = 1.0) {
+        self.geometryProxy = geometryProxy
+        self.type = type
+        self.dataSet = dataSet
+        self.color = color
+        self.opacity = opacity
+        self.circleRadius = circleRadius
+        self.hueDegree = hueDegree
+        self.circleRadiusFunc = circleRadiusFunc
+        self.colorFunc = colorFunc
+        self.hueDegreeFunc = hueDegreeFunc
+        self.xPlotAreaFactor = xPlotAreaFactor
+        
+        self.minX = dataSet.map {$0.x}.min() ?? 0.0
+        self.maxX = dataSet.map {$0.x}.max() ?? 1.0
+        self.minY = dataSet.map {$0.y}.min() ?? 0.0
+        self.maxY = dataSet.map {$0.y}.max() ?? 1.0
     }
 }
 
@@ -177,8 +152,8 @@ extension GraphPlotView {
 //MARK: circlePlot
 extension GraphPlotView {
     func transfarCircleOffset(point:PlotData) -> PlotData {
-        let yOffset = self.geometryProxy.size.height * 0.5 - point.y * yratio + minY * yratio
-        let xOffset = point.x * xratio - self.geometryProxy.size.width * 0.5
+        let yOffset = geometryProxy.size.height * 0.5 - point.y * yratio + minY * yratio
+        let xOffset = point.x * xratio - geometryProxy.size.width * 0.5
         - minX * xratio
         return PlotData(x: xOffset, y: yOffset)
     }
@@ -190,22 +165,23 @@ extension GraphPlotView {
     }
     
     func getCirclePlotRadius(_ index: Int) -> CGFloat {
-        if let funcRadius = self.circleRadiusFunc {
+        if let funcRadius = circleRadiusFunc {
             return funcRadius(index)
         } else {
-            return self.circleRadius
+            return circleRadius
         }
     }
     
     func circlePlot() ->  some View {
-       return ZStack() {
-       ForEach(0..<plotsCount) { index in
-           Circle()
-            .fill(self.getColor(index))
-            .hueRotation(Angle(degrees: self.getHueDegree(index)))
+        let transferedData = circlePlotDataSet
+        return ZStack() {
+        ForEach(0..<totalPlot) { index in
+            Circle()
+            .fill(getColor(index))
+            .hueRotation(Angle(degrees: getHueDegree(index)))
                .blendMode(BlendMode.multiply)
-               .frame(width: self.getCirclePlotRadius(index), height: self.getCirclePlotRadius(index))
-               .offset(x: self.circlePlotDataSet[index].x , y: self.circlePlotDataSet[index].y)
+               .frame(width: getCirclePlotRadius(index), height: getCirclePlotRadius(index))
+               .offset(x: transferedData[index].x , y: transferedData[index].y)
               }
           }
     }
@@ -253,10 +229,14 @@ extension GraphPlotView {
     
     func verticalBar() ->  some View {
         ZStack() {
-            ForEach(0..<plotsCount) {
+            let verticalBarData = verticalBarDataOffSet
+            let BarHeightData = verticalBarDataPLot
+            let width = barWidthX
+            
+            ForEach(0..<totalPlot) {
                 index in
-                ProgressBar(height: self.verticalBarDataPLot[index], width: self.barWidthX, hueDegree: self.getHueDegree(index), opacity: self.opacity, color: self.getColor(index))
-                    .offset(x:self.verticalBarDataOffSet[index].x , y: self.verticalBarDataOffSet[index].y)
+                ProgressBar(height: BarHeightData[index], width: width, hueDegree: getHueDegree(index), opacity: opacity, color: getColor(index))
+                    .offset(x:verticalBarData[index].x , y: verticalBarData[index].y)
             }
             
         }
@@ -271,7 +251,7 @@ extension GraphPlotView {
         let sortedPoints = plotDataSet.sorted(by: \.x).map(\.x)
         
         var minWidth:CGFloat = 0
-        for index in 1..<plotsCount {
+        for index in 1..<totalPlot {
             let dx = sortedPoints[index] - sortedPoints[index - 1]
             if index == 1 { minWidth = dx }
             if minWidth > dx {
@@ -306,11 +286,11 @@ struct GraphPlotView_Previews: PreviewProvider {
             GeometryReader {proxy in
             ZStack{
                 GraphFrameView(geometryProxy:proxy)
-                GraphPlotView(type:.linePlot, geometryProxy: proxy, dataSet: plotset)
+                GraphPlotView(geometryProxy: proxy, type:.linePlot, dataSet: plotset)
                 
-                GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset)
+                GraphPlotView(geometryProxy: proxy, type:.circlePlot, dataSet: plotset)
                 
-                GraphPlotView(type:.verticalBar, geometryProxy: proxy, dataSet: plotset)
+                GraphPlotView(geometryProxy: proxy, type:.verticalBar, dataSet: plotset)
                 }
             }
             .frame(width: 300, height: 200, alignment: .center)
@@ -318,7 +298,7 @@ struct GraphPlotView_Previews: PreviewProvider {
             GeometryReader { proxy in
                 ZStack {
                     GraphFrameView(geometryProxy:proxy)
-                    GraphPlotView(type:.verticalBar, geometryProxy: proxy, dataSet: plotset2, xPlotAreaFactor: 0.9 ).setHueDegreeFunc(function: {index in
+                    GraphPlotView(geometryProxy: proxy, type:.verticalBar, dataSet: plotset2, xPlotAreaFactor: 0.9 ).setHueDegreeFunc(function: {index in
                         return Double(plotset2[index].y * 90 / 23)})
                 }
             }.frame(width: 300, height: 200, alignment: .center)
@@ -326,7 +306,7 @@ struct GraphPlotView_Previews: PreviewProvider {
             GeometryReader { proxy in
                            ZStack {
                                GraphFrameView(geometryProxy:proxy)
-                            GraphPlotView(type:.circlePlot, geometryProxy: proxy, dataSet: plotset2, xPlotAreaFactor: 0.9).setCircle(color:.blue){index in plotset2[index].y * 1.4}
+                            GraphPlotView(geometryProxy: proxy, type:.circlePlot, dataSet: plotset2, xPlotAreaFactor: 0.9).setCircle(color:.blue){index in plotset2[index].y * 1.4}
                                 .setHueDegreeFunc{ index in
                                     return Double(plotset2[index].y * 90 / 23)
                             }
