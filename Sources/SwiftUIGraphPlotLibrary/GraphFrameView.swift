@@ -16,8 +16,6 @@ public enum frameType {
 
 public struct GraphFrameView: View {
     let geometryProxy:GeometryProxy
-    
-    
     let xgridNumber:Int
     let ygridNumber:Int
     

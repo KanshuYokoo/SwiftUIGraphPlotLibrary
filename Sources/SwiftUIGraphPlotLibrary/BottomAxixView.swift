@@ -11,20 +11,10 @@ import SwiftUI
 public struct BottomAxisView: View {
     let dataSet:[PlotData]
     let length:CGFloat
-    let counter:Int
-    let stringFormat:String
+    var counter:Int = 5
+    var format:String = "%.1f"
     var xAxsisScaleParameter : CGFloat = 1.0
-    
-    init(dataSet:[PlotData], length:CGFloat, counter:Int = 5, format:String = "%.1f", xAxsisScaleParameter:CGFloat? ) {
-        self.dataSet = dataSet
-        self.length = length
-        self.counter = counter
-        self.stringFormat = format
-        if let xFactor = xAxsisScaleParameter {
-            self.xAxsisScaleParameter = xFactor
-        }
-    }
-    
+        
     var max:CGFloat {
         dataSet.max(\.x) ?? length
     }
@@ -37,24 +27,24 @@ public struct BottomAxisView: View {
     }
 
     var offSetDx:CGFloat {
-        return length / CGFloat(counter) * self.xAxsisScaleParameter
+        return length / CGFloat(counter) * xAxsisScaleParameter
     }
       
     func culcOffsetX(_ index: Int) -> CGFloat {
-        return  self.offSetDx * CGFloat(index) - length * 0.5
+        return  offSetDx * CGFloat(index) - length * 0.5
     }
       
     func label(at index:Int) -> String {
-        let num = self.min + dx *  CGFloat(index)
-        return String(format:self.stringFormat, num)
+        let num = min + dx *  CGFloat(index)
+        return String(format:self.format, num)
     }
     
     public var body: some View{
         ZStack(alignment: .top){
             ForEach(Array(0...counter ), id: \.self) { index in
-                XAxixNumbers(text:self.label(at: index), offsetX: self.culcOffsetX(index))
+                XAxixNumbers(text:label(at: index), offsetX: culcOffsetX(index))
             }
-        }.frame(width : self.length)
+        }.frame(width : length)
     }
 }
 
@@ -67,7 +57,7 @@ struct XAxixNumbers:View {
             .font(.footnote)
             .fontWeight(.thin)
             .frame(alignment: .leading)
-            .offset( x: self.offsetX)
+            .offset( x: offsetX)
     }
 }
 

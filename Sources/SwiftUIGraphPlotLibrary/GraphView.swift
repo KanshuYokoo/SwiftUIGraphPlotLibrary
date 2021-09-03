@@ -9,61 +9,80 @@
 import SwiftUI
 
 public struct GraphView: View {
-    let grapFrameSize:CGSize
-    let graphWidth:CGFloat
-    let graphHeight:CGFloat
-
-    let isXticks:Bool
-    let isYticks:Bool
-    
     let dataSet:[PlotData]
     let plotTypes:[GraphPlot]
+    let frameSize:CGSize
+    
+    let xTicks:Bool
+    let yTicks:Bool
     
     public var frameView:FrameView
-    public var xTicksView:BottomAxisView
-    public var yTicksView:LeadingAxisView
 
-    var xPlotAreaFactor:CGFloat?
+    var xPlotAreaFactor:CGFloat = 1.0
     
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
+    var graphWidth:CGFloat {
+        return frameSize.width
+    }
+    var graphHeight:CGFloat {
+        return  frameSize.height
+    }
+    
+    public var xTicksView:BottomAxisView {
+        return BottomAxisView(dataSet: dataSet, length: frameSize.width, xAxsisScaleParameter: min(self.xPlotAreaFactor,1.0))
+    }
+    
+    public var yTicksView:LeadingAxisView {
+        return LeadingAxisView(dataSet: dataSet, height: frameSize.height)
+    }
+    
+    public var body: some View {
+        VStack(alignment: .trailing, spacing: 5.0) {
+            HStack {
+                //asix label
+                self.yTicks ? self.yTicksView:nil
+                GeometryReader {proxy in
+                //graph
+                    ZStack{
+                        self.frameView
+                        PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy, xPlotAreaFactor: min(self.xPlotAreaFactor,1.0))
+                        }
+                }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
+                
+            }
+            //bottom
+            self.xTicks ? xTicksView.frame(width: self.graphWidth):nil
+            
+        }
+    }
+}
+
+//MARK: Init
+extension GraphView {
+    public init(dataSet:[PlotData], plotTypes:[GraphPlot], frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat = 1.0) {
         
-        self.grapFrameSize = frameSize
+        self.frameSize = frameSize
         
         if let frameView = frameView {
             self.frameView = frameView
         } else {
             self.frameView = FrameView()
         }
-        
-        self.graphWidth = frameSize.width
-        self.graphHeight = frameSize.height
-                
+                        
         self.dataSet = dataSet
         self.plotTypes = plotTypes
         
-        self.isXticks = xTicks
-        self.isYticks = yTicks
+        self.xTicks = xTicks
+        self.yTicks = yTicks
         
-        //call this before xTicksView initialization.
-        if let xfactor = xPlotAreaFactor {
-            if (xfactor <= 1.0)  {
-                self.xPlotAreaFactor = xfactor
-            } else {
-                self.xPlotAreaFactor = 1.0
-            }
-        }
-        
-        yTicksView = LeadingAxisView(dataSet: dataSet, height: self.graphHeight)
-        xTicksView = BottomAxisView(dataSet: dataSet, length: self.graphWidth, xAxsisScaleParameter: self.xPlotAreaFactor)
-        
+        self.xPlotAreaFactor = xPlotAreaFactor
     }
     
-    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
+    public init(dataSet:[PlotData], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat = 1.0) {
         
         self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
     }
     
-    public init<T1:Numeric,T2:Numeric>(xArray:[T1],yArray:[T2], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat? = nil) {
+    public init<T1:Numeric,T2:Numeric>(xArray:[T1],yArray:[T2], plotType:GraphPlot, frameSize:CGSize, frameView:FrameView? = nil, xTicks:Bool = false, yTicks:Bool = false, xPlotAreaFactor:CGFloat = 1.0) {
         
         var dataSet:[PlotData]
         do {
@@ -76,122 +95,63 @@ public struct GraphView: View {
         }
         self.init(dataSet: dataSet, plotTypes: [plotType], frameSize: frameSize, frameView: frameView, xTicks:xTicks, yTicks:yTicks, xPlotAreaFactor:xPlotAreaFactor)
     }
-    
-    public var body: some View {
-        VStack(alignment: .trailing, spacing: 5.0) {
-            HStack {
-                //asix label
-                self.isYticks ? self.yTicksView:nil
-                GeometryReader {proxy in
-                //graph
-                    ZStack{
-                        self.frameView
-                        PlotView(dataSet: self.dataSet, plotTypes: self.plotTypes, geometryproxy: proxy, xPlotAreaFactor: self.xPlotAreaFactor)
-                        }
-                }.frame(width: self.graphWidth, height: self.graphHeight, alignment: .center)
-                
-            }
-            
-            //bottom
-            self.isXticks ? xTicksView.frame(width: self.graphWidth):nil
-            
-        }
-    }
+
 }
 
 public struct FrameView:View {
-    let xGridLine:Int
-    let yGridLine:Int
-    let color:Color
-    let type:frameType
-    let showGridX:Bool
-    let showGridY:Bool
     
-    init(showGridX:Bool = true, showGridY:Bool = true, howManyLinesX:Int = 10, howManyLinesY:Int = 10, color:Color = .gray, type:frameType = .normal) {
-        self.xGridLine = howManyLinesX
-        self.yGridLine = howManyLinesY
-        self.color = color
-        self.showGridX = showGridX
-        self.showGridY = showGridY
-        self.type = type
-    }
+    let showGridX:Bool = true
+    let showGridY:Bool = true
+    let howManyLinesX:Int = 10
+    let howManyLinesY:Int = 10
+    let color:Color = .gray
+    let type:frameType = .normal
     
     public var body:some View {
         GeometryReader {proxy in
-            GraphFrameView(geometryProxy: proxy, x: self.xGridLine, y: self.yGridLine, color: self.color, type:self.type , gridX: self.showGridX, gridY: self.showGridY)
+            GraphFrameView(geometryProxy: proxy, x: self.howManyLinesX, y: self.howManyLinesY, color: self.color, type:self.type , gridX: self.showGridX, gridY: self.showGridY)
         }
     }
-    
     
 }
 
 public struct PlotView: View {
     let dataSet:[PlotData]
-    let plotSet:[GraphPlot]
-    let geoProxy: GeometryProxy
-    let xPlotAreaFactor:CGFloat?
-    
-    public init(dataSet:[PlotData], plotTypes:[GraphPlot], geometryproxy:GeometryProxy, xPlotAreaFactor:CGFloat?) {
-        self.dataSet = dataSet
-        self.plotSet = plotTypes
-        self.geoProxy = geometryproxy
-        self.xPlotAreaFactor = xPlotAreaFactor
-    }
-    
+    let plotTypes:[GraphPlot]
+    let geometryproxy: GeometryProxy
+    let xPlotAreaFactor:CGFloat
+        
     public var body:some View {
         return
             ZStack {
-                    ForEach(0..<self.plotSet.count) { index in
-                        PlotingPartView(dataSet: self.dataSet, plotType: self.plotSet[index], geometryProxy: geoProxy, xPlotAreaFactor: self.xPlotAreaFactor)
+                    ForEach(0..<self.plotTypes.count) { index in
+                        let plot = self.plotTypes[index]
+                        GraphPlotView(geometryProxy: geometryproxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc, xPlotAreaFactor: self.xPlotAreaFactor )
+                        
                         }
                 }
         
     }
 }
 
-public struct PlotingPartView: View {
-    let dataSet:[PlotData]
-    let plot:GraphPlot
-    let proxy:GeometryProxy
-    let xPlotAreaFactor:CGFloat?
-    
-    public init(dataSet:[PlotData], plotType:GraphPlot, geometryProxy:GeometryProxy, xPlotAreaFactor:CGFloat? = nil) {
-        self.dataSet = dataSet
-        self.plot = plotType
-        self.proxy = geometryProxy
-        self.xPlotAreaFactor = xPlotAreaFactor
-    }
-    public var body:some View {
-        return GraphPlotView(geometryProxy: proxy, type: plot.plotType, dataSet: plot.dataSet ?? self.dataSet, color: plot.color, opacity: plot.opacity, circleRadius: plot.circleRadius, hueDegree: plot.hueDegree, circleRadiusFunc: plot.circleRadiusFunc, colorFunc: plot.colorFunc, hueDegreeFunc: plot.hueDegreeFunc, xPlotAreaFactor: self.xPlotAreaFactor)
-        
-    }
-
-}
-
 public struct GraphPlot {
     
-    let plotType:PlotType
-    var color:Color?
+    var type:PlotType
     var dataSet:[PlotData]?
-    
-    var opacity:Double?
-    var circleRadius:CGFloat?
-    var hueDegree:Double?
+    var color:Color
+
+    var opacity:Double
+    var circleRadius:CGFloat
+    var hueDegree:Double
     
     var circleRadiusFunc: RadiusFunc?
     var colorFunc: ColorFunc?
     var hueDegreeFunc: HueDegreeFunc?
         
-    public init(type:PlotType,  dataSet:[PlotData]? = nil, color:Color? = nil, opacity:Double? = nil, circleRadius:CGFloat? = nil,  hueDegree:Double? = nil) {
-        
-        self.plotType = type
-        self.dataSet = dataSet
-        self.color = color
-        self.opacity = opacity
-        self.circleRadius = circleRadius
-        self.hueDegree = hueDegree
+    var plotType:PlotType {
+        return type
     }
-
+    
     public func setHueDegreeFunc(function:@escaping HueDegreeFunc) ->  GraphPlot{
         var graphPlot = self
         graphPlot.hueDegreeFunc = function
@@ -222,6 +182,18 @@ public struct GraphPlot {
         return graphPlot
     }
     
+}
+
+extension GraphPlot {
+    public init(type:PlotType,  dataSet:[PlotData]? = nil, color:Color = Color.defaultColor, opacity:Double = 1.0, circleRadius:CGFloat = 10,  hueDegree:Double = 0) {
+        
+        self.type = type
+        self.dataSet = dataSet
+        self.color = color
+        self.opacity = opacity
+        self.circleRadius = circleRadius
+        self.hueDegree = hueDegree
+    }
 }
 
 

@@ -10,5 +10,5 @@ import SwiftUI
 
 extension Color {
     public static let appLightgary:Color =  Color(red: 230.0 / 255, green: 232.0 / 255, blue: 226.0 / 255)
-    
+    public static let defaultColor = Color(red: 60.0 / 255, green: 79.0 / 255, blue: 255.0 / 255)
 }
